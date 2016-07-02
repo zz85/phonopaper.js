@@ -50,7 +50,7 @@ function setup() {
 
 		// apply threshold
 		for ( let i = 0; i < height; i ++ ) {
-			dark[i] = greyScale[ i * width + midWidth ] > THRESHOLD;
+			dark[i] = greyScale[ i * width + midWidth ] < THRESHOLD;
 		}
 
 		console.log( dark );
