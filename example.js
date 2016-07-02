@@ -154,7 +154,56 @@ function setup() {
 	document.body.appendChild(canvas);
 }
 
+function loadUserMedia() {
+	video = document.createElement('video');
+	video.autoplay = true;
+	document.body.appendChild(video);
+
+	video.oncanplay = function() {
+		// console.log('oncanplay', video.clientWidth, video.clientHeight);
+		canvas.width = video.clientWidth;
+		canvas.height = video.clientHeight;
+		setInterval(process, 25);
+	}
+
+
+
+	navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+	var tw = 1280 // 320 // 640 // 1280;
+	var th = 720 // 240 // 480 // 720
+
+	var hdConstraints = {
+		audio: false,
+		video: {
+			mandatory: {
+				maxWidth: tw,
+				maxHeight: th
+			}
+		}
+	};
+
+	if (navigator.getUserMedia) {
+		navigator.getUserMedia(hdConstraints, success, errorCallback);
+	} else {
+		errorCallback('');
+	}
+
+	function errorCallback(e) {
+		console.log("Can't access user media", e);
+	}
+
+	function success(stream) {
+		console.log('success', stream);
+		video.src = window.URL.createObjectURL(stream);
+		// video.onclick = function() { video.play(); };
+		// video.play();
+
+	}
+}
+
 
 setup();
 // loadImage();
-loadVideo();
+// loadVideo();
+loadUserMedia();
