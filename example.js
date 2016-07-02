@@ -65,7 +65,7 @@ function loadImage() {
 			greyScale[ i ] = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 		}
 
-		const THRESHOLD = 0.7;
+		const THRESHOLD = 0.5;
 
 		dark = new Array(height);
 
@@ -127,7 +127,7 @@ function process() {
 
 	const THRESHOLD = 0.7;
 
-	dark = new Array(height);
+	dark = new Array( height );
 
 	// apply threshold
 	for ( let i = 0; i < height; i ++ ) {
@@ -144,6 +144,7 @@ function process() {
 
 	// process bits
 	let ok = PhonoPaper.processStrip( dark );
+	makeSomeNoise(notesOn);
 	// console.log('ok', ok);
 }
 
@@ -165,7 +166,6 @@ function loadUserMedia() {
 		canvas.height = video.clientHeight;
 		setInterval(process, 25);
 	}
-
 
 
 	navigator.getUserMedia  = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -190,20 +190,19 @@ function loadUserMedia() {
 	}
 
 	function errorCallback(e) {
-		console.log("Can't access user media", e);
+		console.log('Cant access user media', e);
 	}
 
 	function success(stream) {
 		console.log('success', stream);
 		video.src = window.URL.createObjectURL(stream);
-		// video.onclick = function() { video.play(); };
-		// video.play();
-
+		video.onclick = function() { video.play(); };
+		video.play();
 	}
 }
 
 
 setup();
 // loadImage();
-// loadVideo();
-loadUserMedia();
+loadVideo();
+// loadUserMedia();
