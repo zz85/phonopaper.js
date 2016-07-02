@@ -1,6 +1,6 @@
 # Phonopaper.js
 
-Cedric, Chinmay and our attempt on making Phonopaper run in JS and the browser
+[Cedric] (https://github.com/honnet), [Chinmay](https://github.com/notthetup/) and my attempt on making [Phonopaper](http://www.warmplace.ru/soft/phonopaper/) run in JS and the browser
 
 
 ## References

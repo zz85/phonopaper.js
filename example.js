@@ -8,6 +8,7 @@ function loadVideo() {
 	video.onplay = function() {
 		console.log('started playing', video.width, video.height);
 	}
+	video.muted = true;
 
 	// loadeddata loadedmetadata loadstart
 
@@ -15,7 +16,7 @@ function loadVideo() {
 		console.log('oncanplay', video.clientWidth, video.clientHeight);
 		canvas.width = video.clientWidth;
 		canvas.height = video.clientHeight;
-		setInterval(process, 500);
+		setInterval(process, 25);
 	}
 
 	document.body.appendChild(video);
@@ -27,7 +28,7 @@ function loadImage() {
 	const image = new Image();
 	image.src = 'samples/your_sound.small.jpg';
 	// image.src = 'samples/your_sound2.png';
-	// image.src = 'samples/bach - prelude & fugue 8_.jpg';
+	image.src = 'samples/bach - prelude & fugue 8_.jpg';
 	// image.src = 'samples/sample.png';
 
 	image.onload = function(e) {
@@ -79,11 +80,11 @@ function loadImage() {
 			}
 		}
 
-		console.log( dark );
+		// console.log( dark );
 
 		// process bits
 		let ok = PhonoPaper.processStrip( dark );
-		console.log('ok', ok);
+		// console.log('ok', ok);
 
 		// PhonoPaper.processImage( greyScale );
 
@@ -139,11 +140,11 @@ function process() {
 		}
 	}
 
-	console.log( dark );
+	// console.log( dark );
 
 	// process bits
 	let ok = PhonoPaper.processStrip( dark );
-	console.log('ok', ok);
+	// console.log('ok', ok);
 }
 
 function setup() {
