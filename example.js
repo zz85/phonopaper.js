@@ -16,7 +16,7 @@ function loadVideo() {
 		console.log('oncanplay', video.clientWidth, video.clientHeight);
 		canvas.width = video.clientWidth;
 		canvas.height = video.clientHeight;
-		setInterval(process, 25);
+		setInterval(process, 100);
 	}
 
 	document.body.appendChild(video);
