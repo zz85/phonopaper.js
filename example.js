@@ -55,17 +55,6 @@ function process( target ) {
 	let pixels = width * height;
 
 
-	ctx.clearRect(0, 0, width, height);
-
-	ctx.drawImage( target, 0, 0 );
-	ctx.strokeStyle = 'yellow';
-	ctx.fillStyle = 'red';
-
-	ctx.beginPath();
-	const midWidth = width / 2 | 0;
-	ctx.rect(midWidth - 2, 0, 3, height);
-	ctx.stroke();
-
 	idata = ctx.getImageData( 0, 0, width, height );
 
 	// conversion to greyscale
@@ -77,7 +66,28 @@ function process( target ) {
 	// process bits
 	const ok = PhonoPaper.processStrip( dark );
 	makeSomeNoise(notesOn);
-	// console.log('ok', ok);
+
+	ctx.clearRect(0, 0, width, height);
+
+	ctx.drawImage( target, 0, 0 );
+	ctx.strokeStyle = 'yellow';
+
+	ctx.beginPath();
+	const midWidth = width / 2 | 0;
+	ctx.rect(midWidth - 2, 0, 3, height);
+	ctx.stroke();
+
+	if (ok) {
+		for ( let i = 0; i < height; i ++ ) {
+			if (dark[i]) {
+				ctx.beginPath();
+				ctx.rect(midWidth - 10, i, 5, 1);
+
+				ctx.fillStyle = i > ok.top && i < ok.bottom ? 'red' : 'blue';
+				ctx.fill();
+			}
+		}
+	}
 }
 
 function setup() {
