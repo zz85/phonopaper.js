@@ -9,7 +9,9 @@ function setup() {
 
 
 	const image = new Image();
-	image.src = 'samples/your_sound.small.jpg';
+	// image.src = 'samples/your_sound.small.jpg';
+	// image.src = 'samples/your_sound2.png';
+	image.src = 'samples/bach - prelude & fugue 8_.jpg';
 
 	image.onload = function(e) {
 		console.log( 'resolution', image.width, image.height );
@@ -19,6 +21,7 @@ function setup() {
 
 		ctx.drawImage( image, 0, 0 );
 		ctx.strokeStyle = 'yellow';
+		ctx.fillStyle = 'red';
 
 		ctx.beginPath();
 		let midWidth = image.width / 2 | 0;
@@ -51,6 +54,12 @@ function setup() {
 		// apply threshold
 		for ( let i = 0; i < height; i ++ ) {
 			dark[i] = greyScale[ i * width + midWidth ] < THRESHOLD;
+
+			if (dark[i]) {
+				ctx.beginPath();
+				ctx.rect(midWidth - 10, i, 5, 1);
+				ctx.fill();
+			}
 		}
 
 		console.log( dark );
@@ -58,8 +67,6 @@ function setup() {
 		// process bits
 		let ok = PhonoPaper.processStrip( dark );
 		console.log('ok', ok);
-
-
 
 		// PhonoPaper.processImage( greyScale );
 
