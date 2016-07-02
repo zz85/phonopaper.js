@@ -56,7 +56,8 @@ function setup() {
 		console.log( dark );
 
 		// process bits
-		PhonoPaper.processStrip( dark );
+		let ok = PhonoPaper.processStrip( dark );
+		console.log('ok', ok);
 
 
 
