@@ -1,4 +1,4 @@
-const THRESHOLD = 0.7;
+const THRESHOLD = 0.55; // higher for more sensitivity
 const POLL = 30;
 
 let canvas, ctx;
@@ -6,7 +6,11 @@ let canvas, ctx;
 function loadVideo() {
 	video = document.createElement('video');
 	video.src = 'samples/video.mov';
+
 	video.autoplay = true;
+	// video.playbackRate = 1.2;
+	// video.currentTime = 7.7
+
 	video.onplay = function() {
 		console.log('started playing', video.width, video.height);
 	}
@@ -87,6 +91,11 @@ function process( target ) {
 				ctx.fill();
 			}
 		}
+
+		ctx.strokeStyle = 'red';
+		ctx.beginPath();
+		ctx.rect(midWidth - 20, ok.top, 5, ok.bottom - ok.top);
+		ctx.stroke();
 	}
 }
 
