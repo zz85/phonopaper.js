@@ -1,7 +1,7 @@
 const THRESHOLD = 0.55; // higher for more sensitivity
 const POLL = 30;
 
-let canvas, ctx;
+let canvas, ctx, greyscale;
 
 function loadVideo() {
 	video = document.createElement('video');
@@ -62,7 +62,7 @@ function process( target ) {
 	idata = ctx.getImageData( 0, 0, width, height );
 
 	// conversion to greyscale
-	const greyscale = PhonoPaper.greyscaleImage( idata );
+	greyscale = PhonoPaper.greyscaleImage( idata, greyscale );
 
 	// apply threshold
 	const dark = PhonoPaper.thresholdImage( greyscale, width, height, THRESHOLD );
