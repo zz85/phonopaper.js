@@ -12,6 +12,47 @@
 		<script src="lib/spectrogram.js"></script>
 		<script>
 			var sample = new Spectrogram('audio/test.mp3', "#vis", {width:500, height:200, maxFrequency:8000});
+
+
+			var canvas
+				, width = 1000
+				, height = 1024
+				, ctx
+				, x = 0
+
+			// visuals
+
+			function setup() {
+
+				canvas = document.createElement('canvas');
+				canvas.width = width;
+				canvas.height = height;
+
+				ctx = canvas.getContext('2d');
+				document.body.appendChild(canvas);
+
+
+
+				setInterval(draw, 30);
+			}
+
+			function draw() {
+				// ctx.clearRect(0, 0, width, height);
+
+				var freqs = sample.freqs;
+				for (var i = 0; i < freqs.length; i++) {
+					var v = 255 - freqs[i];
+					ctx.fillStyle = `rgb(${v},${v},${v})`;
+					ctx.fillRect(x, i, 1, 1);
+				}
+
+				x++;
+				x %= width;
+
+			}
+
+			setup();
+
 		</script>
 	</body>
 </html>
