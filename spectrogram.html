@@ -9,9 +9,10 @@
 		</style>
 	</head>
 	<body>
+		<script src="lib/common.js"></script>
 		<script src="lib/spectrogram.js"></script>
 		<script>
-			var sample = new Spectrogram('audio/test.mp3', "#vis", {width:500, height:200, maxFrequency:8000});
+			var sample = new Spectrogram('audio/test.mp3', {width:500, height:200, maxFrequency:8000});
 
 
 			var canvas
@@ -19,6 +20,7 @@
 				, height = 1024
 				, ctx
 				, x = 0
+				, interval = 30
 
 			// visuals
 
@@ -33,17 +35,17 @@
 
 
 
-				setInterval(draw, 30);
+				// setInterval(draw, interval);
 			}
 
 			function draw() {
-				// ctx.clearRect(0, 0, width, height);
+				ctx.clearRect(x, 0, 1, height);
 
 				var freqs = sample.freqs;
 				for (var i = 0; i < freqs.length; i++) {
 					var v = 255 - freqs[i];
 					ctx.fillStyle = `rgb(${v},${v},${v})`;
-					ctx.fillRect(x, i, 1, 1);
+					ctx.fillRect(x, height - i - 1, 1, 1);
 				}
 
 				x++;
