@@ -33,8 +33,6 @@
 				ctx = canvas.getContext('2d');
 				document.body.appendChild(canvas);
 
-
-
 				// setInterval(draw, interval);
 			}
 
@@ -43,7 +41,7 @@
 
 				var freqs = sample.freqs;
 				for (var i = 0; i < freqs.length; i++) {
-					var v = 255 - freqs[i];
+					var v = 255 - freqs[i] * 4;
 					ctx.fillStyle = `rgb(${v},${v},${v})`;
 					ctx.fillRect(x, height - i - 1, 1, 1);
 				}
