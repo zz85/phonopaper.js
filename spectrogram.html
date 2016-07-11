@@ -44,7 +44,7 @@
 			function draw() {
 				ctx.clearRect(x, 0, 1, height);
 
-				// dumps
+				// // dumps
 				// var freqs = sample.freqs;
 				// for (var i = 0; i < freqs.length; i++) {
 				// 	var v = 255 - freqs[i] * 4;
@@ -52,20 +52,28 @@
 				// 	ctx.fillRect(x, height - i - 1, 1, 1);
 				// }
 
-				// var ratio = height / FREQ_RANGE;
-				// for (var freq = FREQ_START, i = height; freq < FREQ_END; freq++, i--) {
-				// 	var v = 255 - sample.getFrequencyValue(freq) * 4;
+				// // scaling for the number of pixels
+				// for (var i = 0; i < height; i++) {
+				// 	var target = FREQ_RANGE * i / height + FREQ_START;
+
+				// 	var v = 255 - sample.getFrequencyValue(target) * 4;
 				// 	ctx.fillStyle = `rgb(${v},${v},${v})`;
-				// 	ctx.fillRect(x, height - i - 1, 1, 1 * ratio);
+				// 	ctx.fillRect(x, height - i - 1, 1, 1);
 				// }
 
+				// TODO: requires some kind of averaging to get more accurate results?
+				// scaling for the phonopaper pixels
 				for (var i = 0; i < height; i++) {
-					var target = FREQ_RANGE * i / height + FREQ_START;
+					var bin = i / height * TOTALNOTES | 0;
+					var target = indexToFreq( bin );
 
-					var v = 255 - sample.getFrequencyValue(target) * 4;
+					var freq = sample.getFrequencyValue(target);
+					var v = freq > 10 ? 255 - freq : 255;
 					ctx.fillStyle = `rgb(${v},${v},${v})`;
-					ctx.fillRect(x, height - i - 1, 1, 1);
+					ctx.fillRect(x, i, 1, 1);
 				}
+
+
 
 				x++;
 				x %= width;
