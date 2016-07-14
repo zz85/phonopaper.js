@@ -22,6 +22,7 @@ function loadVideo() {
 		console.log('oncanplay', video.clientWidth, video.clientHeight);
 		canvas.width = video.clientWidth;
 		canvas.height = video.clientHeight;
+		video.style.display = 'none';
 		setInterval( extract, POLL );
 	}
 
@@ -106,7 +107,7 @@ function setup() {
 	document.body.appendChild(canvas);
 }
 
-function loadUserMedia() {
+function loadUserMedia(deviceId) {
 	video = document.createElement('video');
 	video.autoplay = true;
 	document.body.appendChild(video);
@@ -115,6 +116,7 @@ function loadUserMedia() {
 		// console.log('oncanplay', video.clientWidth, video.clientHeight);
 		canvas.width = video.clientWidth;
 		canvas.height = video.clientHeight;
+		video.style.display = 'none';
 		setInterval(extract, POLL);
 	}
 
@@ -126,12 +128,21 @@ function loadUserMedia() {
 	var hdConstraints = {
 		audio: false,
 		video: {
+			// optional: [{
+			// 	sourceId: deviceId
+			// }]
+			// deviceId: deviceId ? { exact: deviceId } : undefined,
 			mandatory: {
+				sourceId: deviceId,
 				maxWidth: tw,
 				maxHeight: th
 			}
 		}
 	};
+
+	// navigator.mediaDevices
+	// 	.getUserMedia(hdConstraints)
+	// 	.then(success).catch(errorCallback);
 
 	if (navigator.getUserMedia) {
 		navigator.getUserMedia(hdConstraints, success, errorCallback);
@@ -157,7 +168,27 @@ const media = window.location.hash;
 if (media == "#img"){
 	loadImage();
 } else if (media == "#um"){
-	loadUserMedia();
+
+	navigator.mediaDevices.enumerateDevices()
+		.then( devices => {
+			devices
+				.filter( d => d.kind === 'videoinput' )
+				.map( d => {
+					var a = document.createElement('a');
+					a.href = '#'
+					a.onclick = _ => {
+						loadUserMedia(d.deviceId)
+						return false
+					}
+					a.innerHTML = d.label
+					console.log(d.label, d.deviceId)
+					document.body.appendChild(a)
+					document.body.appendChild(document.createElement('br'))
+				})
+		})
+
+
+	// loadUserMedia();
 } else{
 	loadVideo();
 }
