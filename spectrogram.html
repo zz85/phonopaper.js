@@ -17,7 +17,8 @@
 
 			var canvas
 				, width = 1024
-				, height = 800
+				, height = 600
+				, borders = 200
 				, ctx
 				, x = 0
 				, interval = 30
@@ -37,17 +38,31 @@
 
 				canvas = document.createElement('canvas');
 				canvas.width = width;
-				canvas.height = height;
+				canvas.height = height + borders;
 
 				ctx = canvas.getContext('2d');
 				document.body.appendChild(canvas);
+
+				var unit = 10;
+				ctx.fillRect(0, unit, width, unit);
+				ctx.fillRect(0, unit * 3, width, unit);
+				ctx.fillRect(0, unit * 5, width, unit * 3);
+				ctx.fillRect(0, unit * 9, width, unit);
+
+				var bottom = height + borders;
+				ctx.fillRect(0, bottom - unit, width, -unit);
+				ctx.fillRect(0, bottom - unit * 3, width, -unit);
+				ctx.fillRect(0, bottom - unit * 5, width, -unit * 3);
+				ctx.fillRect(0, bottom - unit * 9, width, -unit);
 
 				// setInterval(draw, interval);
 			}
 
 			function draw() {
 				if (!sample.isPlaying) return;
-
+				ctx.restore()
+				ctx.save()
+				ctx.translate(0, borders / 2)
 				ctx.clearRect(x, 0, 1, height);
 				ctx.globalCompositeOperation = 'screen';
 
@@ -112,7 +127,9 @@
 
 					// var v = freq > 50 ? 255 - freq  : 255 - freq * 0.5;
 					var v = 255 - freq;
-					ctx.fillStyle = `rgb(0, ${v}, 0)`;
+					// ctx.fillStyle = `rgb(0, ${v}, 0)`;
+
+					ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
 					ctx.fillRect(x, i, 1, 1);
 				}
 
