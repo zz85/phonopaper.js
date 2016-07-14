@@ -46,7 +46,10 @@
 			}
 
 			function draw() {
+				if (!sample.isPlaying) return;
+
 				ctx.clearRect(x, 0, 1, height);
+				ctx.globalCompositeOperation = 'screen';
 
 				// // dumps
 				// var freqs = sample.freqs;
@@ -56,32 +59,33 @@
 				// 	ctx.fillRect(x, height - i - 1, 1, 1);
 				// }
 
-				// // scaling for the number of pixels
-				// for (var i = 0; i < height; i++) {
-				// 	var target = FREQ_RANGE * i / height + FREQ_START;
 
-				// 	var v = 255 - sample.getFrequencyValue(target) * 4;
-				// 	ctx.fillStyle = `rgb(${v},${v},${v})`;
-				// 	ctx.fillRect(x, height - i - 1, 1, 1);
-				//
+				// scaling for the number of pixels
+				for (var i = 0; i < height; i++) {
+					var target = FREQ_RANGE * i / height + FREQ_START;
 
-				// getFrequencyValue
-				// getBin
-				// getBinFrequency
+					var v = 255 - sample.getFrequencyValue(target) * 4;
+					// ctx.fillStyle = `rgb(${v},${v},${v})`;
+					ctx.fillStyle = `rgb(${v},0,0)`;
+					ctx.fillRect(x, height - i - 1, 1, 1);
+				}
 
-				// TODO: requires some kind of averaging to get more accurate results?
+				/*
+				Problems.
+				- Log scale is kinda noisey, also because of lower resolution in lower frequency FFT
+
+
+				Solutions
+				- attempt to denoise log scale with thresholding / smoothening
+
+				- Smoothen linear scale graphs, then attempt to map into log scale.
+				*/
+
 				// scaling for the phonopaper pixels
-
-				if (!sample.isPlaying) return;
-
 				var lastBin = null;
 				for (var i = 0; i < height; i++) {
 					var w = i / height * TOTALNOTES;
 					var target = indexToFreq( w );
-
-
-
-
 					var bin = sample.getBin(target);
 					var count = 1;
 
@@ -95,9 +99,8 @@
 						count++;
 					}
 
-					// freq += sample.getFrequencyAtBin(bin);
-					// freq /= count;
-					freq = Math.max(max, sample.getFrequencyAtBin(bin));
+					freq += sample.getFrequencyAtBin(bin); freq /= count;
+					// freq = Math.max(max, sample.getFrequencyAtBin(bin));
 					lastBin = bin;
 
 
@@ -108,7 +111,7 @@
 					if (x == 0) console.log('freq', target, 'bin', bin);
 
 					var v = freq > 50 ? 255 - freq : 255 - freq * 0.5;
-					ctx.fillStyle = `rgb(${v},${v},${v})`;
+					ctx.fillStyle = `rgb(0, ${v}, 0)`;
 					ctx.fillRect(x, i, 1, 1);
 				}
 
