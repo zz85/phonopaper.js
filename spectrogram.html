@@ -67,7 +67,7 @@
 					var v = 255 - sample.getFrequencyValue(target);
 					// ctx.fillStyle = `rgb(${v},${v},${v})`;
 					ctx.fillStyle = `rgb(${v}, 0, 0)`;
-					// ctx.fillRect(x, height - i - 1, 1, 1);
+					ctx.fillRect(x, height - i - 1, 1, 1);
 				}
 
 				/*
@@ -113,7 +113,7 @@
 					// var v = freq > 50 ? 255 - freq  : 255 - freq * 0.5;
 					var v = 255 - freq;
 					ctx.fillStyle = `rgb(0, ${v}, 0)`;
-					ctx.fillRect(x, i, 1, 1);
+					// ctx.fillRect(x, i, 1, 1);
 				}
 
 
