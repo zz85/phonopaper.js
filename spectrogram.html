@@ -26,6 +26,10 @@
 				, FREQ_RANGE = FREQ_END - FREQ_START
 
 
+			document.addEventListener('keypress', e => {
+				console.log(e)
+				sample.togglePlayback();
+			});
 
 			// visuals
 
@@ -59,16 +63,51 @@
 				// 	var v = 255 - sample.getFrequencyValue(target) * 4;
 				// 	ctx.fillStyle = `rgb(${v},${v},${v})`;
 				// 	ctx.fillRect(x, height - i - 1, 1, 1);
-				// }
+				//
+
+				// getFrequencyValue
+				// getBin
+				// getBinFrequency
 
 				// TODO: requires some kind of averaging to get more accurate results?
 				// scaling for the phonopaper pixels
-				for (var i = 0; i < height; i++) {
-					var bin = i / height * TOTALNOTES | 0;
-					var target = indexToFreq( bin );
 
-					var freq = sample.getFrequencyValue(target);
-					var v = freq > 10 ? 255 - freq : 255;
+				if (!sample.isPlaying) return;
+
+				var lastBin = null;
+				for (var i = 0; i < height; i++) {
+					var w = i / height * TOTALNOTES;
+					var target = indexToFreq( w );
+
+
+
+
+					var bin = sample.getBin(target);
+					var count = 1;
+
+					var freq = 0;
+					var max = 0;
+					while (lastBin && lastBin < bin) {
+						lastBin++;
+						var last = sample.getFrequencyAtBin(lastBin);
+						freq += last;
+						max = Math.max(max, last)
+						count++;
+					}
+
+					// freq += sample.getFrequencyAtBin(bin);
+					// freq /= count;
+					freq = Math.max(max, sample.getFrequencyAtBin(bin));
+					lastBin = bin;
+
+
+
+					// var freq = sample.getFrequencyValue(target);
+
+
+					if (x == 0) console.log('freq', target, 'bin', bin);
+
+					var v = freq > 50 ? 255 - freq : 255 - freq * 0.5;
 					ctx.fillStyle = `rgb(${v},${v},${v})`;
 					ctx.fillRect(x, i, 1, 1);
 				}
