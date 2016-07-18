@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>phonopaper.js</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+		</style>
+	</head>
+	<body>
+		<script src="lib/common.js"></script>
+		<script src="lib/spectrogram.js"></script>
+		<script>
+			var sample = new Spectrogram('audio/test.mp3', {width:500, height:200, maxFrequency:8000});
+
+
+			var canvas
+				, width = 1024
+				, height = 600
+				, borders = 200
+				, ctx
+				, x = 0
+				, interval = 30
+				, FREQ_START = 16
+				, FREQ_END = 4187
+				, FREQ_RANGE = FREQ_END - FREQ_START
+
+
+			document.addEventListener('keypress', e => {
+				console.log(e)
+				sample.togglePlayback();
+			});
+
+			// visuals
+
+			function setup() {
+
+				canvas = document.createElement('canvas');
+				canvas.width = width;
+				canvas.height = height + borders;
+
+				ctx = canvas.getContext('2d');
+				document.body.appendChild(canvas);
+
+				var unit = 10;
+				ctx.fillRect(0, unit, width, unit);
+				ctx.fillRect(0, unit * 3, width, unit);
+				ctx.fillRect(0, unit * 5, width, unit * 3);
+				ctx.fillRect(0, unit * 9, width, unit);
+
+				var bottom = height + borders;
+				ctx.fillRect(0, bottom - unit, width, -unit);
+				ctx.fillRect(0, bottom - unit * 3, width, -unit);
+				ctx.fillRect(0, bottom - unit * 5, width, -unit * 3);
+				ctx.fillRect(0, bottom - unit * 9, width, -unit);
+
+				// setInterval(draw, interval);
+			}
+
+			function draw() {
+				if (!sample.isPlaying) return;
+				ctx.restore()
+				ctx.save()
+				ctx.translate(0, borders / 2)
+				ctx.clearRect(x, 0, 1, height);
+				ctx.globalCompositeOperation = 'screen';
+
+				// // dumps
+				// var freqs = sample.freqs;
+				// for (var i = 0; i < freqs.length; i++) {
+				// 	var v = 255 - freqs[i] * 4;
+				// 	ctx.fillStyle = `rgb(${v},${v},${v})`;
+				// 	ctx.fillRect(x, height - i - 1, 1, 1);
+				// }
+
+
+				// scaling for the number of pixels
+				for (var i = 0; i < height; i++) {
+					var target = FREQ_RANGE * i / height + FREQ_START;
+
+					var v = 255 - sample.getFrequencyValue(target);
+					// ctx.fillStyle = `rgb(${v},${v},${v})`;
+					ctx.fillStyle = `rgb(${v}, 0, 0)`;
+					// ctx.fillRect(x, height - i - 1, 1, 1);
+				}
+
+				/*
+				Problems.
+				- Log scale is kinda noisey, also because of lower resolution in lower frequency FFT
+
+
+				Solutions
+				- attempt to denoise log scale with thresholding / smoothening
+
+				- Smoothen linear scale graphs, then attempt to map into log scale.
+				*/
+
+				// scaling for the phonopaper pixels
+				var lastBin = null;
+				for (var i = 0; i < height; i++) {
+					var w = i / height * TOTALNOTES;
+					var target = indexToFreq( w );
+					var bin = sample.getBin(target);
+					var count = 1;
+
+					var freq = 0;
+					var max = 0;
+					while (lastBin && lastBin < bin) {
+						lastBin++;
+						var last = sample.getFrequencyAtBin(lastBin);
+						freq += last;
+						max = Math.max(max, last)
+						count++;
+					}
+
+					freq += sample.getFrequencyAtBin(bin); freq /= count;
+					// freq = Math.max(max, sample.getFrequencyAtBin(bin));
+					lastBin = bin;
+
+
+
+					// var freq = sample.getFrequencyValue(target);
+
+
+					if (x == 0) console.log('freq', target, 'bin', bin);
+
+					// var v = freq > 50 ? 255 - freq  : 255 - freq * 0.5;
+					var v = 255 - freq;
+					// ctx.fillStyle = `rgb(0, ${v}, 0)`;
+
+					ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
+					ctx.fillRect(x, i, 1, 1);
+				}
+
+
+
+				x++;
+				x %= width;
+
+			}
+
+			setup();
+
+		</script>
+	</body>
+</html>
