@@ -1,0 +1,19 @@
+{
+  "name": "phonopaper.js",
+  "version": "1.0.0",
+  "description": "[Cedric](https://github.com/honnet), [Chinmay](https://github.com/notthetup/) and [zz85](https://github.com/zz85/)attempt on making [Phonopaper](http://www.warmplace.ru/soft/phonopaper/) run in JS and the browser as a hack for Creative Coding Jam session.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zz85/phonopaper.js.git"
+  },
+  "author": "Joshua Koo, Chinmay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zz85/phonopaper.js/issues"
+  },
+  "homepage": "https://github.com/zz85/phonopaper.js#readme"
+}
