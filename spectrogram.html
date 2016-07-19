@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<script src="lib/common.js"></script>
-		<script src="node_modules/goertzel-filter/dist/goertzel.js"></script>
+		<script src="node_modules/goertzeljs/build/goertzel.js"></script>
 		<script src="lib/spectrogram.js"></script>
 		<script>
 
@@ -73,66 +73,17 @@
 				ctx.clearRect(x, 0, 1, height);
 				ctx.globalCompositeOperation = 'screen';
 
-				// // dumps
-				// var freqs = sample.freqs;
-				// for (var i = 0; i < freqs.length; i++) {
-				// 	var v = 255 - freqs[i] * 4;
-				// 	ctx.fillStyle = `rgb(${v},${v},${v})`;
-				// 	ctx.fillRect(x, height - i - 1, 1, 1);
-				// }
-
-
-				// scaling for the number of pixels
-				for (var i = 0; i < height; i++) {
-					var target = FREQ_RANGE * i / height + FREQ_START;
-
-					var v = 255 - sample.getFrequencyValue(target);
-					// ctx.fillStyle = `rgb(${v},${v},${v})`;
-					ctx.fillStyle = `rgb(${v}, 0, 0)`;
-					// ctx.fillRect(x, height - i - 1, 1, 1);
-				}
-
-				/*
-				Problems.
-				- Log scale is kinda noisey, also because of lower resolution in lower frequency FFT
-
-
-				Solutions
-				- attempt to denoise log scale with thresholding / smoothening
-
-				- Smoothen linear scale graphs, then attempt to map into log scale.
-				*/
-
 				// scaling for the phonopaper pixels
 				var lastBin = null;
 				for (var i = 0; i < height; i++) {
-					var w = i / height * TOTALNOTES;
-					var target = indexToFreq( w );
-					var bin = sample.getBin(target);
-					var count = 1;
+					var w = i / height * TOTALNOTES | 0;
 
-					var freq = 0;
-					var max = 0;
-					while (lastBin && lastBin < bin) {
-						lastBin++;
-						var last = sample.getFrequencyAtBin(lastBin);
-						freq += last;
-						max = Math.max(max, last)
-						count++;
-					}
+					var f = frequencies[w]
 
-					freq += sample.getFrequencyAtBin(bin); freq /= count;
-					// freq = Math.max(max, sample.getFrequencyAtBin(bin));
-					lastBin = bin;
-
-					// var freq = sample.getFrequencyValue(target);
-
-
-					if (x == 0) console.log('freq', target, 'bin', bin);
-
-					// var v = freq > 50 ? 255 - freq  : 255 - freq * 0.5;
-					var v = 255 - freq;
-					// ctx.fillStyle = `rgb(0, ${v}, 0)`;
+					goertzel.totalPower[f] * goertzel.energies[f]
+					var pow = goertzel.energies[f] * 200000 | 0;
+					var v = 255 - pow;
+					// v = pow;
 
 					ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
 					ctx.fillRect(x, i, 1, 1);

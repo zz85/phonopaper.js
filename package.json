@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/zz85/phonopaper.js#readme",
   "dependencies": {
-    "goertzel-filter": "^1.0.0"
+    "goertzeljs": "^3.0.4"
   }
 }
