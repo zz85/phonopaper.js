@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/zz85/phonopaper.js/issues"
   },
-  "homepage": "https://github.com/zz85/phonopaper.js#readme"
+  "homepage": "https://github.com/zz85/phonopaper.js#readme",
+  "dependencies": {
+    "goertzel-filter": "^1.0.0"
+  }
 }
