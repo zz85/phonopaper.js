@@ -78,12 +78,12 @@
 				for (var i = 0; i < height; i++) {
 					var w = i / height * TOTALNOTES | 0;
 
-					var f = frequencies[w]
 
-					goertzel.totalPower[f] * goertzel.energies[f]
-					var pow = goertzel.energies[f] * 200000 | 0;
-					var v = 255 - pow;
+					// var v = 255 - pow;
 					// v = pow;
+
+					var v = sample.buffer[w] / 10000 | 0;
+					var v = 255 - v;
 
 					ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
 					ctx.fillRect(x, i, 1, 1);
