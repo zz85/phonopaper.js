@@ -56,9 +56,14 @@
 				ctx.fillRect(0, bottom - unit * 9, width, -unit);
 
 				// setInterval(draw, interval);
+
+				// draw();
 			}
 
 			function draw() {
+
+				// requestAnimationFrame(draw);
+
 				if (!sample.isPlaying) return;
 				ctx.restore()
 				ctx.save()
@@ -80,8 +85,8 @@
 					var target = FREQ_RANGE * i / height + FREQ_START;
 
 					var v = 255 - sample.getFrequencyValue(target);
-					// ctx.fillStyle = `rgb(${v},${v},${v})`;
-					ctx.fillStyle = `rgb(${v}, 0, 0)`;
+					ctx.fillStyle = `rgb(${v},${v},${v})`;
+					// ctx.fillStyle = `rgb(${v}, 0, 0)`;
 					// ctx.fillRect(x, height - i - 1, 1, 1);
 				}
 
@@ -92,7 +97,6 @@
 
 				Solutions
 				- attempt to denoise log scale with thresholding / smoothening
-
 				- Smoothen linear scale graphs, then attempt to map into log scale.
 				*/
 
@@ -114,13 +118,12 @@
 						count++;
 					}
 
-					freq += sample.getFrequencyAtBin(bin); freq /= count;
+					// freq += sample.getFrequencyAtBin(bin); freq /= count;
 					// freq = Math.max(max, sample.getFrequencyAtBin(bin));
 					lastBin = bin;
 
 
-
-					// var freq = sample.getFrequencyValue(target);
+					var freq = sample.getFrequencyValue(target);
 
 
 					if (x == 0) console.log('freq', target, 'bin', bin);
