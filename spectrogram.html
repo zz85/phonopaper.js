@@ -10,7 +10,6 @@
 	</head>
 	<body>
 		<script src="lib/common.js"></script>
-		<script src="node_modules/goertzel-filter/dist/goertzel.js"></script>
 		<script src="lib/spectrogram.js"></script>
 		<script>
 
@@ -82,7 +81,7 @@
 					// var v = 255 - pow;
 					// v = pow;
 
-					var v = sample.buffer[w] / 10000 | 0;
+					var v = sample.powers[w] | 0;
 					var v = 255 - v;
 
 					ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
