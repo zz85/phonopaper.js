@@ -70,7 +70,6 @@ function process( target ) {
 
 	// process bits
 	const ok = PhonoPaper.processStrip( dark );
-	makeSomeNoise(notesOn);
 
 	ctx.clearRect(0, 0, width, height);
 
